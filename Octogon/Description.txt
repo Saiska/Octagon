@@ -1,0 +1,40 @@
+﻿[size=3][center][size=5][url=https://www.nexusmods.com/skyrimspecialedition/mods/28773]Octagon[/url]﻿[/size][/center][/size][size=3]﻿
+Version 1.0.0 released 3 September 2019
+
+This batch tool allow you to change all your texture in one go.
+It can downscale the textures, change format/compression, apply custom GMIC filters.
+It also can saves original textures in a backup folder, in case something goes wrong.
+It should be working with any game using DDS files as textures.
+
+Depending of your needs, you'll find Octagon useful for: 
+[/size][list]
+[*][size=3]Reducing VRAM usage, if you don't have enough or just want to gain fps, by reducing textures sizes,[/size]
+[*][size=3]Reformat and correct Oldrym ported mods textures,[/size]
+[*][size=3]Make different sizes of your textures pack,[/size]
+[*][size=3]Apply custom filters to your textures pack[/size]
+[/list][size=3]
+You can ask in the comments for any bugs or any features not working as it should, i'll look into it.
+
+[u]You'll need these tools for Octagon[/u][/size][list]
+[*][size=3][url=https://github.com/microsoft/DirectXTex/releases/tag/feb2019]Texconv and Texdiag [/url]﻿(Needed) 
+[/size]
+[*][size=3][url=https://www.nexusmods.com/newvegas/mods/64745]Bsarch﻿ [/url]﻿(Optional, only needed to unpack and repack BSA archives)[/size]
+[*][size=3][url=https://gmic.eu/download.shtml]Gmic﻿ [/url]﻿(Optional, only needed to apply GMIC filters to textures) - take the windows command line (CLI) version.
+[/size]
+[/list][size=3]
+For more info on GMIC [color=#f4f4f4]([/color][color=#f4f4f4]Open-Source Framework for Image Processing)[/color]
+[url=https://gmic.eu/gallery/]You can see here what GMIC can do﻿.[/url]
+Tip: GMIC is really time consuming. Try it on some texture before applying it to a larger scale, 'cause well it can take the night. Or two.[/size]
+
+1.1.2 released 14 May 2020
+- Fixing windows size at start
+1.1.1 released 14 May 2020
+- Updated support of Bsarch from the 5 may release
+- Improved support for Fallout 4 *.ba2
+- Improved support for Fallout 4 textures
+- Bugfixes and more error handled
+1.1.0 released 26 September 2019
+- Adds new filters and process
+- Adds repacking loose files option
+- Change GMIC to apply like a process
+- Correct errors on filters and mipmap

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\build\MSBuild.Microsoft.VisualStudio.Web.targets.props" Condition="Exists('..\packages\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\build\MSBuild.Microsoft.VisualStudio.Web.targets.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69A71450-BC0A-4BEB-96EE-0E07F04F4A94}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OctagonCommon</RootNamespace>
+    <AssemblyName>OctagonCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>f6edf9a3</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Args\ProgresserEventArgs.cs" />
+    <Compile Include="Configurations\ConfigurationPath.cs" />
+    <Compile Include="Configurations\ConfigurationMain.cs" />
+    <Compile Include="Configurations\ConfigurationPass.cs" />
+    <Compile Include="Configurations\ConfigurationPassBsa.cs" />
+    <Compile Include="Configurations\ConfigurationRepack.cs" />
+    <Compile Include="Configurations\ConfigurationSearch.cs" />
+    <Compile Include="Configurations\ConfigurationSelection.cs" />
+    <Compile Include="Configurations\ConfigurationSelectionPass.cs" />
+    <Compile Include="Args\LoggerArgs.cs" />
+    <Compile Include="Configurations\ConfigurationString.cs" />
+    <Compile Include="Informations\InformationCopy.cs" />
+    <Compile Include="Informations\InformationFileDeletion.cs" />
+    <Compile Include="Informations\InformationMerge.cs" />
+    <Compile Include="Informations\InformationPriority.cs" />
+    <Compile Include="Informations\InformationRepack.cs" />
+    <Compile Include="Informations\InformationRepackBsa.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="Args\ProcessorArgs.cs" />
+    <Compile Include="Progresser.cs" />
+    <Compile Include="Args\ProgresserArgs.cs" />
+    <Compile Include="Statics\ArchiveExtensionList.cs" />
+    <Compile Include="Statics\DxgiFormatList.cs" />
+    <Compile Include="Statics\GameParameterExtensionList.cs" />
+    <Compile Include="Statics\TextureExtensionList.cs" />
+    <Compile Include="Statics\TypeLog.cs" />
+    <Compile Include="Statics\TypePass.cs" />
+    <Compile Include="Statics\TypeSelection.cs" />
+    <Compile Include="Executions\ExternalTools.cs" />
+    <Compile Include="Executions\FileExecution.cs" />
+    <Compile Include="Executions\FileInformation.cs" />
+    <Compile Include="Executions\FilePreparation.cs" />
+    <Compile Include="Executions\FileUtils.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Persistence.cs" />
+    <Compile Include="Configurations\IConfigurationSelection.cs" />
+    <Compile Include="Informations\InformationDirectory.cs" />
+    <Compile Include="Informations\InformationFile.cs" />
+    <Compile Include="Informations\InformationImage.cs" />
+    <Compile Include="Informations\InformationOrder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Statics\TypeTexCompression.cs" />
+    <Compile Include="Args\StatusArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

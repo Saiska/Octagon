@@ -1,0 +1,58 @@
+﻿<Window x:Class="Octagon.Windows.WindowCredits"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Octagon Credits" Height="341" Width="441"  Icon="../icon.ico"
+        WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource {x:Type Window}}" ResizeMode="NoResize">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Image Grid.Column="1" Grid.Row="1" Source="../icon.png" Width="128" Height="128"
+		       HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+		<Label Grid.Column="2" Grid.Row="1" Content="Octagon"
+		       HorizontalAlignment="Center" VerticalAlignment="Center"
+		       FontFamily="Segoe UI Black" FontSize="48" FontWeight="Bold" />
+
+		<Label Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" Content="by Saiska Bugenhagen"
+		       HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"
+		       FontWeight="Bold" />
+
+		<Label Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" Content="1.1.2 (14 May 2020)"
+		       HorizontalAlignment="Center" VerticalAlignment="Center"
+		       FontSize="10" />
+
+		<Label Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4"
+		       HorizontalAlignment="Center" VerticalAlignment="Center"
+		       FontWeight="Bold">
+			<Hyperlink NavigateUri="https://www.nexusmods.com/skyrimspecialedition/mods/28773"
+			           RequestNavigate="Hyperlink_RequestNavigate" Foreground="Goldenrod">
+				Go to Nexus mod page
+			</Hyperlink>
+		</Label>
+
+		<Label Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="5"
+		       HorizontalAlignment="Center" VerticalAlignment="Center"
+		       FontWeight="Bold">
+			<Hyperlink NavigateUri="https://www.nexusmods.com/skyrimspecialedition/users/29091225"
+			           RequestNavigate="Hyperlink_RequestNavigate" Foreground="MidnightBlue">
+				Saiska Nexus user profile
+			</Hyperlink>
+		</Label>
+
+	</Grid>
+</Window>

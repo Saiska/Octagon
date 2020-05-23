@@ -1,0 +1,151 @@
+﻿<Window x:Class="Octagon.Windows.WindowFilter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:Octagon.Models"
+        xmlns:converter="clr-namespace:Octagon.Converter"
+        Title="Octagon Edit filters" mc:Ignorable="d"
+        Style="{StaticResource {x:Type Window}}" Icon="../icon.ico"
+        WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance models:ModelConfigurationSelection}"
+        Height="960" Width="1280">
+
+	<Grid Margin="10">
+		<Grid.Resources>
+			<converter:IntToStringConverter x:Key="customIntToStringConverter" />
+		</Grid.Resources>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0" Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Row="0" Foreground="DodgerBlue" TextWrapping="Wrap"
+			           Text="Filters allow to include or exclude file/directory depending of their name. It don't take file extension in consideration. Also, it works as a OR between them." />
+
+			<Button Grid.Column="1" Content="Show more infos" Height="20"
+			        Click="ButtonShowInfo" Width="100" />
+		</Grid>
+
+
+		<StackPanel Grid.Row="1" Margin="5" Orientation="Vertical" Visibility="{Binding VisibilityShowInfo}">
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="Known SSE file name ending:" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_n - normal map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap"
+			           Text="_msn - Model Space Normal map/Object Space Normal map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_g - glow map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_p - parallax map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_e - environment cube map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap"
+			           Text="_em/_m/_envmask/_envmapmask - environment mask map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_s - specular map" />
+			<TextBlock Margin="5" Foreground="DodgerBlue" TextWrapping="Wrap" Text="_sk - A skin texture" />
+		</StackPanel>
+
+		<ListView Grid.Row="2" Margin="5" x:Name="ListViewSourceFilter"
+		          ItemsSource="{Binding Filters, Mode=OneWay}" Background="{StaticResource ScrollViewerBackgroundSpecial}">
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+					<Setter Property="Background" Value="{StaticResource ScrollViewerBackgroundSpecial}" />
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="5" />
+							<ColumnDefinition Width="2*" />
+							<ColumnDefinition Width="3*" />
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="20" />
+						</Grid.ColumnDefinitions>
+						<Rectangle Grid.Column="0" x:Name="trName" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+						<ComboBox Grid.Column="1" Margin="5" HorizontalAlignment="Stretch"
+						          ItemsSource="{Binding ProxyTypeSelections, Mode=OneWay}"
+						          SelectedValue="{Binding TypeSelection, Mode=TwoWay}"
+						          SelectedValuePath="TypeSelection" DisplayMemberPath="Text" />
+						<TextBox Grid.Column="2" Margin="5" Text="{Binding Pattern, Mode=TwoWay}" HorizontalAlignment="Stretch" />
+						<TextBox Grid.Column="3" Margin="5" Visibility="{Binding VisibilityOccurence, Mode=OneWay}"
+						         Text="{Binding Occurence, Mode=TwoWay,Converter={StaticResource customIntToStringConverter}}"
+						         HorizontalAlignment="Stretch" />
+						<Button Grid.Column="4" Padding="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+						        Command="{Binding ElementName=ListViewSourceFilter, Path=DataContext.DeleteItemCommand}"
+						        CommandParameter="{Binding }">
+							<Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Fill" Stroke="{StaticResource ForegroundBrush}" StrokeThickness="2"
+							      Width="12" Height="12" />
+						</Button>
+					</Grid>
+					<DataTemplate.Triggers>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="0">
+							<Setter TargetName="trName" Property="Fill" Value="DarkGreen" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="1">
+							<Setter TargetName="trName" Property="Fill" Value="DarkOliveGreen" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="2">
+							<Setter TargetName="trName" Property="Fill" Value="DarkCyan" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="3">
+							<Setter TargetName="trName" Property="Fill" Value="DarkRed" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="4">
+							<Setter TargetName="trName" Property="Fill" Value="DarkMagenta" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="5">
+							<Setter TargetName="trName" Property="Fill" Value="DarkSlateBlue" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="6">
+							<Setter TargetName="trName" Property="Fill" Value="DarkGoldenrod" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="7">
+							<Setter TargetName="trName" Property="Fill" Value="DarkBlue" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="8">
+							<Setter TargetName="trName" Property="Fill" Value="DarkKhaki" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="9">
+							<Setter TargetName="trName" Property="Fill" Value="DarkSlateGray" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="10">
+							<Setter TargetName="trName" Property="Fill" Value="DarkSalmon" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="11">
+							<Setter TargetName="trName" Property="Fill" Value="DarkSeaGreen" />
+						</DataTrigger>
+					</DataTemplate.Triggers>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+		<Grid Grid.Row="3">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Content="Add filter" Height="28" Margin="5" Padding="5"
+			        Click="ButtonAddFilter" />
+			<Button Grid.Column="1" Content="Invert all" Height="28" Margin="5" Padding="5"
+			        Click="ButtonInvert" />
+			<Button Grid.Column="3" Content="Export filters" Height="28" Margin="5" Padding="5"
+			        Click="ButtonExportFilters" />
+			<Button Grid.Column="4" Content="Import filters" Height="28" Margin="5" Padding="5"
+			        Click="ButtonImportFilters" />
+			<Button Grid.Column="6" Content="Close" Height="28" Margin="5" Padding="5"
+			        Click="ButtonClose" />
+		</Grid>
+	</Grid>
+</Window>
