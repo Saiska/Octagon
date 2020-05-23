@@ -69,7 +69,7 @@ namespace OctagonCommon.Executions
             }
          };
          process.BeginOutputReadLine();
-         process.WaitForExit(-1);
+         process.WaitForExit();
          return searchFound;
       }
 
@@ -125,7 +125,7 @@ namespace OctagonCommon.Executions
             }
          };
          process.BeginOutputReadLine();
-         process.WaitForExit(-1);
+         process.WaitForExit();
          Progresser.EventEnd(eventName);
          if (error != null)
          {
@@ -169,127 +169,11 @@ namespace OctagonCommon.Executions
          //
          var process = new Process { StartInfo = startInfo };
          process.Start();
-         process.WaitForExit();
+         var result = process.StandardOutput.ReadToEnd();
+         process.WaitForExit();           
          exitCode = process.ExitCode;
-         return process.StandardOutput.ReadToEnd();
-      }
-
-      //public List<string> CallDxDiagList(string filePath)
-      //{
-      //   var startInfo = new ProcessStartInfo
-      //   {
-      //      WindowStyle = ProcessWindowStyle.Hidden,
-      //      UseShellExecute = false,
-      //      CreateNoWindow = true,
-      //      RedirectStandardOutput = true,
-      //      FileName = ConfigurationPath.PathTexdiag,
-      //      Arguments = string.Format("info \"{0}\" ", filePath)
-      //   };
-      //   //
-      //   var process = new Process { StartInfo = startInfo };
-      //   List<string> result = new List<string>();
-      //   process.OutputDataReceived += (sender, args) =>
-      //   {
-      //      result.Add(args.Data);
-      //   };
-      //   process.Start();
-      //   process.BeginOutputReadLine();
-      //   process.WaitForExit(-1);
-      //   return result;
-      //}
-
-      //public bool CallDxDiagDirect(string filePath, out int wr, out int hr, out int mr, out string fr)
-      //{
-      //   var startInfo = new ProcessStartInfo
-      //   {
-      //      WindowStyle = ProcessWindowStyle.Hidden,
-      //      UseShellExecute = false,
-      //      CreateNoWindow = true,
-      //      RedirectStandardOutput = true,
-      //      FileName = ConfigurationPath.PathTexdiag,
-      //      Arguments = string.Format("info \"{0}\" ", filePath)
-      //   };
-      //   //
-      //   var process = new Process { StartInfo = startInfo };
-      //   //
-      //   int nline = 0;
-      //   //     
-      //   int w = 0, h = 0, m = 0;
-      //   string f = null;
-      //   bool isError = false;
-      //   //
-      //   process.OutputDataReceived += (sender, args) =>
-      //   {
-      //      var line = args.Data;
-      //      if (line != null)
-      //      {
-      //         switch (nline)
-      //         {
-      //            case 4:
-      //               if (line.Length < 17)
-      //               {
-      //                  isError = true;
-      //                  Logger.Log("Invalid DxDiag data: {0}\n Returned value: {1}", filePath, line, TypeLog.Error);
-      //               }
-      //               else
-      //               {
-      //                  isError |= !int.TryParse(line.Substring(16, line.Length - 16), out w);
-      //               }
-      //               break;
-      //            case 5:
-      //               if (line.Length < 17)
-      //               {
-      //                  isError = true;
-      //                  Logger.Log("Invalid DxDiag data: {0}\n Returned value: {1}", filePath, line, TypeLog.Error);
-      //               }
-      //               else
-      //               {
-      //                  isError |= !int.TryParse(line.Substring(16, line.Length - 16), out h);
-      //               }
-      //               break;
-      //            case 7:
-      //               if (line.Length < 17)
-      //               {
-      //                  isError = true;
-      //                  Logger.Log("Invalid DxDiag data: {0}\n Returned value: {1}", filePath, line, TypeLog.Error);
-      //               }
-      //               else
-      //               {
-      //                  isError |= !int.TryParse(line.Substring(16, line.Length - 16), out m);
-      //               }
-      //               break;
-      //            case 10:
-      //               if (line.Length < 17)
-      //               {
-      //                  isError = true;
-      //                  Logger.Log("Invalid DxDiag data: {0}\n Returned value: {1}", filePath, line, TypeLog.Error);
-      //               }
-      //               else
-      //               {
-      //                  f = line.Substring(16, line.Length - 16);
-      //               }
-      //               break;
-      //         }
-      //      }
-      //      nline++;
-      //   };
-      //   //
-      //   process.Start();
-      //   process.BeginOutputReadLine();
-      //   process.WaitForExit(-1);
-      //   //
-      //   if (nline < 10)
-      //   {
-      //      isError = true;
-      //   }
-      //   //
-      //   wr = w;
-      //   hr = h;
-      //   mr = m;
-      //   fr = f;
-      //   //
-      //   return isError;
-      //}
+         return result;
+      }        
 
       public string CallTexConv(string filePath, string ouputDir, int newW, int newH, int mips, string format, TypeTexCompression typeTexCompression)
       {
@@ -321,8 +205,9 @@ namespace OctagonCommon.Executions
          //
          var process = new Process { StartInfo = startInfo };
          process.Start();
-         process.WaitForExit(-1);
-         return process.StandardOutput.ReadToEnd();
+         var result = process.StandardOutput.ReadToEnd();
+         process.WaitForExit();
+         return result;
       }
 
       public string CallTexConvDdsToPng(string filePath, string ouputDir)
@@ -339,8 +224,9 @@ namespace OctagonCommon.Executions
          //
          var process = new Process { StartInfo = startInfo };
          process.Start();
-         process.WaitForExit(-1);
-         return process.StandardOutput.ReadToEnd();
+         var result = process.StandardOutput.ReadToEnd();
+         process.WaitForExit();
+         return result;
       }
 
       public void CallGmic(string filePath, string parameter)
@@ -358,7 +244,7 @@ namespace OctagonCommon.Executions
          //
          var process = new Process { StartInfo = startInfo };
          process.Start();
-         process.WaitForExit(-1);
+         process.WaitForExit();
          // process.StandardError.ReadToEnd();
          // return process.StandardOutput.ReadToEnd();
       }
@@ -378,7 +264,7 @@ namespace OctagonCommon.Executions
          //
          var process = new Process { StartInfo = startInfo };
          process.Start();
-         process.WaitForExit(-1);
+         process.WaitForExit();
          // process.StandardError.ReadToEnd();
          // return process.StandardOutput.ReadToEnd();
       }
