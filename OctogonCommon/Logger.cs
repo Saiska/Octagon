@@ -98,6 +98,11 @@ namespace OctagonCommon
          Instance.ProcessLog(string.Format(s, arg0, arg1, arg2, arg3), typeLog);
       }
 
+      public static void Log(string s, object arg0, object arg1, object arg2, object arg3, object arg4, TypeLog typeLog = TypeLog.Normal)
+      {
+         Instance.ProcessLog(string.Format(s, arg0, arg1, arg2, arg3, arg4), typeLog);
+      }
+
       public static void Log(Exception exception)
       {
          Instance.ProcessLog(exception.Message, TypeLog.Error);

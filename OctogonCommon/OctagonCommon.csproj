@@ -51,6 +51,7 @@
     <Compile Include="Informations\InformationFileDeletion.cs" />
     <Compile Include="Informations\InformationMerge.cs" />
     <Compile Include="Informations\InformationPriority.cs" />
+    <Compile Include="Informations\InformationProcess.cs" />
     <Compile Include="Informations\InformationRepack.cs" />
     <Compile Include="Informations\InformationRepackBsa.cs" />
     <Compile Include="Processor.cs" />

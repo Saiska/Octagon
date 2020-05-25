@@ -26,6 +26,8 @@ For more info on GMIC [color=#f4f4f4]([/color][color=#f4f4f4]Open-Source Framewo
 [url=https://gmic.eu/gallery/]You can see here what GMIC can do﻿.[/url]
 Tip: GMIC is really time consuming. Try it on some texture before applying it to a larger scale, 'cause well it can take the night. Or two.[/size]
 
+1.1.4 released 25 May 2020
+- Fix processing when dxdiag sends unordered infos
 1.1.3 released 23 May 2020
 - Fix deadlock on texconv calls
 1.1.2 released 14 May 2020

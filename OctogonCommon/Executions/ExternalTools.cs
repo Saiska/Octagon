@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using OctagonCommon.Configurations;
+using OctagonCommon.Informations;
 using OctagonCommon.Statics;
 
 #endregion
@@ -151,31 +153,28 @@ namespace OctagonCommon.Executions
          if (isMultithread)
          {
             call = string.Format("{0} -mt", call);
-         }     
+         }
          return CallBsarch(string.Format("{0}: {1}", ProgressUnpack, fileName), call, verbose);
       }
 
-      public string CallDxDiag(string filePath, out int exitCode)
+      public InformationProcess CallDxDiag(string filePath, bool isGetOutput, bool isVerbose)
       {
          var startInfo = new ProcessStartInfo
          {
             WindowStyle = ProcessWindowStyle.Hidden,
             UseShellExecute = false,
             RedirectStandardOutput = true,
+            RedirectStandardError = true,
             CreateNoWindow = true,
             FileName = ConfigurationPath.PathTexdiag,
             Arguments = string.Format("info \"{0}\" ", filePath)
          };
          //
          var process = new Process { StartInfo = startInfo };
-         process.Start();
-         var result = process.StandardOutput.ReadToEnd();
-         process.WaitForExit();           
-         exitCode = process.ExitCode;
-         return result;
-      }        
+         return CheckOutput(process, isGetOutput, isVerbose);
+      }
 
-      public string CallTexConv(string filePath, string ouputDir, int newW, int newH, int mips, string format, TypeTexCompression typeTexCompression)
+      public InformationProcess CallTexConv(string filePath, string ouputDir, int newW, int newH, int mips, string format, TypeTexCompression typeTexCompression, bool isGetOutput, bool isVerbose)
       {
          string compressionParam = string.Empty;
          switch (typeTexCompression)
@@ -198,35 +197,76 @@ namespace OctagonCommon.Executions
             WindowStyle = ProcessWindowStyle.Hidden,
             UseShellExecute = false,
             RedirectStandardOutput = true,
+            RedirectStandardError = true,
             CreateNoWindow = true,
             FileName = ConfigurationPath.PathTexconv,
             Arguments = string.Format("-nologo -y -sepalpha -f {0}{1} -w {2} -h {3} -m {4} -o \"{5}\" \"{6}\"", format, compressionParam, newW, newH, mips, ouputDir, filePath)
          };
          //
          var process = new Process { StartInfo = startInfo };
-         process.Start();
-         var result = process.StandardOutput.ReadToEnd();
-         process.WaitForExit();
-         return result;
+         return CheckOutput(process, isGetOutput, isVerbose);
       }
 
-      public string CallTexConvDdsToPng(string filePath, string ouputDir)
+      public InformationProcess CallTexConvDdsToPng(string filePath, string ouputDir, bool isGetOutput, bool isVerbose)
       {
          var startInfo = new ProcessStartInfo
          {
             WindowStyle = ProcessWindowStyle.Hidden,
             UseShellExecute = false,
             RedirectStandardOutput = true,
+            RedirectStandardError = true,
             CreateNoWindow = true,
             FileName = ConfigurationPath.PathTexconv,
             Arguments = string.Format("-nologo -y -ft png -o \"{0}\" \"{1}\"", ouputDir, filePath)
          };
          //
          var process = new Process { StartInfo = startInfo };
+         return CheckOutput(process, isGetOutput, isVerbose);
+      }
+
+      private InformationProcess CheckOutput(Process process, bool isGetOutput, bool isVerbose)
+      {
+         bool isError = false;
+         List<string> output = new List<string>();
+         StringBuilder errors = new StringBuilder();
+         //
+         process.ErrorDataReceived += (sender, args) =>
+         {
+            if (!string.IsNullOrEmpty(args.Data))
+            {
+               Logger.Log(args.Data, TypeLog.Error);
+               errors.AppendLine(args.Data);
+               isError = true;
+            }
+         };
+         process.OutputDataReceived += (sender, args) =>
+         {
+            if (!string.IsNullOrEmpty(args.Data))
+            {
+               if (isVerbose)
+                  Logger.Log(args.Data);
+               if (isGetOutput)
+                  output.Add(args.Data.Trim());
+            }
+         };
+         //                                 
          process.Start();
-         var result = process.StandardOutput.ReadToEnd();
+         //
+         process.BeginErrorReadLine();
+         process.BeginOutputReadLine();
+         //                    
          process.WaitForExit();
-         return result;
+         isError |= process.ExitCode > 0;
+         process.Close();
+         //
+         if (isError || isVerbose)
+         {
+            var file = process.StartInfo.FileName;
+            var args = process.StartInfo.Arguments;
+            Logger.Log("Program call was: {0} {1}", file, args, TypeLog.Warning);
+         }
+         //
+         return new InformationProcess(output, errors.ToString(), isError);
       }
 
       public void CallGmic(string filePath, string parameter)

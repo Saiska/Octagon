@@ -240,7 +240,7 @@ namespace OctagonCommon.Executions
                confirmOrder |= isBsaMustBeDecompressed;
             }
          }
-         else if (mainCfg.HasTextureOperation() && GetCurrentImageSize(order))
+         else if (mainCfg.HasTextureOperation() && GetCurrentImageSize(order, mainCfg.IsVerbose))
          {
             //                 
             foreach (var scalePass in mainCfg.Passes)
@@ -556,31 +556,53 @@ namespace OctagonCommon.Executions
       //   return true;
       //}
 
-      private bool GetCurrentImageSize(InformationOrder order)
+      private bool GetCurrentImageSize(InformationOrder order, bool isVerbose)
       {
          var textureSource = order.IsUseBackup && order.FileTarget != null ? order.FileTarget.FullName : order.FileSource.FullName;
          int exitCode;
          //
-         var tDxDiag = ExternalTools.CallDxDiag(textureSource, out exitCode);
-         if (exitCode != 0)
+         var tDxDiag = ExternalTools.CallDxDiag(textureSource, true, isVerbose);
+         //
+         if (tDxDiag.HasError)
          {
-            Logger.Log("DxDiag failed for {0}\nExit code: {1}\nDxDiag Output:\n{2}", textureSource, exitCode, tDxDiag, TypeLog.Error);
+            Logger.Log("DxDiag failed for {0}\nDxDiag Output:\n{1}", textureSource, tDxDiag, TypeLog.Error);
             return false;
          }
          //
-         var lines = tDxDiag.Split('\n');
+         var lines = tDxDiag.Output;
+         //
+         int w = 0, h = 0, m = 0;
+         string f = string.Empty;
+         //
+         bool bw = false, bh = false, bm = false, bf = false;
+         //           
          bool parsingNoError = true;
-         if (lines.Length < 11 || lines[4].Length < 17 || lines[5].Length < 17 || lines[7].Length < 17 || lines[10].Length < 17)
+         foreach (var line in lines)
          {
-            Logger.Log("Invalid DxDiag data for {0}\nDxDiag Output:\n{1}", textureSource, tDxDiag, TypeLog.Error);
-            return false;
+            if (!bw && line.StartsWith("width", StringComparison.OrdinalIgnoreCase))
+            {
+               bw = true;
+               parsingNoError &= int.TryParse(line.Substring(8), out w);
+            }
+            //
+            if (!bh && line.StartsWith("height", StringComparison.OrdinalIgnoreCase))
+            {
+               bh = true;
+               parsingNoError &= int.TryParse(line.Substring(9), out h);
+            }
+            //
+            if (!bm && line.StartsWith("miplevels", StringComparison.OrdinalIgnoreCase))
+            {
+               bm = true;
+               parsingNoError &= int.TryParse(line.Substring(12), out m);
+            }
+            //   
+            if (!bf && line.StartsWith("format", StringComparison.OrdinalIgnoreCase))
+            {
+               bf = true;
+               f = line.Substring(9);
+            }
          }
-         //
-         int w, h, m;
-         parsingNoError &= int.TryParse(lines[4].Substring(16, lines[4].Length - 17), out w);
-         parsingNoError &= int.TryParse(lines[5].Substring(16, lines[5].Length - 17), out h);
-         parsingNoError &= int.TryParse(lines[7].Substring(16, lines[7].Length - 17), out m);
-         var f = lines[10].Substring(16, lines[10].Length - 17);
          //
          if (!parsingNoError)
          {
@@ -588,8 +610,19 @@ namespace OctagonCommon.Executions
             return false;
          }
          //
+         if (w == 0 || h == 0 || m == 0 || string.IsNullOrEmpty(f))
+         {
+            Logger.Log("Invalid DxDiag data for {0}\nDxDiag Output:\n{1}", textureSource, tDxDiag, TypeLog.Error);
+            return false;
+         }
+         //
          order.TargetSize = new InformationImage { Width = w, Height = h, Mipmaps = m, Format = f };
          order.OriginalSize = new InformationImage { Width = w, Height = h, Mipmaps = m, Format = f, TypeTexCompression = TypeTexCompression.None };
+         //
+         if (isVerbose)
+         {
+            Logger.Log("Info found for {0}: width {1} height {2} mipmap {3} format {4}", order.FileSource.FullName, w, h, m, f);
+         }
          return true;
       }
 

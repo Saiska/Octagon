@@ -196,7 +196,7 @@ namespace OctagonCommon.Executions
          {
             if (order.FileSource.Directory != null)
             {
-               ExternalTools.CallTexConvDdsToPng(order.FileSource.FullName, order.FileSource.Directory.FullName);
+               ExternalTools.CallTexConvDdsToPng(order.FileSource.FullName, order.FileSource.Directory.FullName, false, mainCfg.IsVerbose);
                var newFilePath = order.FileSource.FullName.Substring(0, order.FileSource.FullName.Length - 4) + ".png";
                foreach (var orderGmicCommand in order.GmicCommands)
                {
@@ -214,7 +214,7 @@ namespace OctagonCommon.Executions
                string pathSource = order.FileSource.FullName;
                if (order.IsApplyOnPng)
                {
-                  ExternalTools.CallTexConvDdsToPng(order.FileSource.FullName, order.FileSource.Directory.FullName);
+                  ExternalTools.CallTexConvDdsToPng(order.FileSource.FullName, order.FileSource.Directory.FullName, false, mainCfg.IsVerbose);
                   pathSource = order.FileSource.FullName.Substring(0, order.FileSource.FullName.Length - 4) + ".png";
                }
                //
@@ -250,9 +250,9 @@ namespace OctagonCommon.Executions
       private void CreateDDS(ConfigurationMain mainCfg, string textureSource, InformationOrder order)
       {
          var tTexConv = ExternalTools.CallTexConv(textureSource, order.FileSource.Directory.FullName, order.TargetSize.Width,
-            order.TargetSize.Height, Math.Max(order.TargetSize.Mipmaps, 1), order.TargetSize.Format, order.TargetSize.TypeTexCompression);
-         //
-         if (tTexConv.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+            order.TargetSize.Height, Math.Max(order.TargetSize.Mipmaps, 1), order.TargetSize.Format, order.TargetSize.TypeTexCompression, false, mainCfg.IsVerbose);
+         //             
+         if (tTexConv.HasError)
          {
             Logger.Log("Failed to process {0} with parameters w={1} h={2} m={3}", order.FileSource.FullName, order.TargetSize.Width, order.TargetSize.Height,
                order.TargetSize.Mipmaps, TypeLog.Error);

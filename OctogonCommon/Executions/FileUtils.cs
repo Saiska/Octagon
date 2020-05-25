@@ -223,7 +223,7 @@ namespace OctagonCommon.Executions
          }
       }
 
-      public static List<InformationRepackBsa> PrepareForPacking(List<ConfigurationRepack> repacks, string pathSource, bool isNumbered, bool isVerbose)
+      public static List<InformationRepackBsa> PrepareForPacking(List<ConfigurationRepack> repacks, string pathSource, string defaultGameParmaeter, bool isNumbered, bool isVerbose)
       {
          var source = new DirectoryInfo(pathSource);
          //Generate directory for repack list
@@ -231,6 +231,10 @@ namespace OctagonCommon.Executions
          //
          foreach (ConfigurationRepack configurationRepack in repacks)
          {
+            if (string.IsNullOrEmpty(configurationRepack.GameParameter))
+            {
+               configurationRepack.GameParameter = defaultGameParmaeter;
+            }
             var currentRepack = new InformationRepack(configurationRepack);
             bool addValidated = false;
             foreach (DirectoryInfo directoryInfo in source.GetDirectories())
@@ -356,7 +360,7 @@ namespace OctagonCommon.Executions
                   bool isTextureOnly = directoryInfo.GetDirectories().Length == 1 && directoryInfo.GetDirectories()
                                           .Any(d => string.Equals(d.Name, "textures", StringComparison.OrdinalIgnoreCase));
                   var repackCfg = GetGoodRepackConfiguration(Path.GetFileNameWithoutExtension(espFile.FullName), gameParameter, isSound, isTextureOnly);
-                  var listResult = PrepareForPacking(repackCfg, directoryInfo.FullName, false, isVerbose);
+                  var listResult = PrepareForPacking(repackCfg, directoryInfo.FullName, gameParameter, false, isVerbose);
                   result.AddRange(listResult);
                }
             }
@@ -565,7 +569,7 @@ namespace OctagonCommon.Executions
          }
          //  
          foreach (DirectoryInfo subSource in source.GetDirectories())
-         {                                 
+         {
             var path = Path.Combine(target.FullName, subSource.Name);
             DirectoryInfo nextTargetSubDir = new DirectoryInfo(path);
 
@@ -656,7 +660,48 @@ namespace OctagonCommon.Executions
          }
       }
 
+      public static bool SearchAnyDirectory(DirectoryInfo source, Func<DirectoryInfo, bool> fct)
+      {
+         // Get each file     
+         if (fct(source))
+         {
+            return true;
+         }
+         // See each subdirectory using recursion.
+         foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+         {
+            //
+            if (SearchAnyDirectory(diSourceSubDir, fct))
+            {
+               return true;
+            }
+            //
+         }
+         return false;
+      }
 
+      public static bool SearchAnyFiles(DirectoryInfo source, Func<FileInfo, bool> fct)
+      {
+         // Get each file  
+         foreach (FileInfo fileSource in source.GetFiles())
+         {
+            if (fct(fileSource))
+            {
+               return true;
+            }
+         }
+         // See each subdirectory using recursion.
+         foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+         {
+            //
+            if (SearchAnyFiles(diSourceSubDir, fct))
+            {
+               return true;
+            }
+            //
+         }
+         return false;
+      }
 
 
       public static bool SearchAnyFilesOkForArchive(DirectoryInfo source)

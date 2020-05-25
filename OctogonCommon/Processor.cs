@@ -360,7 +360,7 @@ namespace OctagonCommon
             {
                var bsaToProcess = mainCfg.PassBsa.IsIntelligentPacking ?
                   FileUtils.GetIntelligentPacking(mainCfg.Selection, mainCfg.PathSource, mainCfg.PassBsa.GameParameter, mainCfg.PassBsa.IsRepackCreateDummy, mainCfg.IsVerbose) :
-                  FileUtils.PrepareForPacking(mainCfg.PassBsa.Repacks, mainCfg.PathSource, true, mainCfg.IsVerbose);
+                  FileUtils.PrepareForPacking(mainCfg.PassBsa.Repacks, mainCfg.PathSource, mainCfg.PassBsa.GameParameter, true, mainCfg.IsVerbose);
 
 
 
