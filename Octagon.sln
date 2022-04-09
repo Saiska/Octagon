@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6B5F3C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctagonTesting", "OctagonTesting\OctagonTesting.csproj", "{38653C7C-0AC0-472F-ADE8-E9EDC05E424A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctagonConsole", "OctagonConsole\OctagonConsole.csproj", "{A0A05D66-493D-4771-9907-75A43C07B409}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{38653C7C-0AC0-472F-ADE8-E9EDC05E424A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38653C7C-0AC0-472F-ADE8-E9EDC05E424A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38653C7C-0AC0-472F-ADE8-E9EDC05E424A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A05D66-493D-4771-9907-75A43C07B409}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A05D66-493D-4771-9907-75A43C07B409}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A05D66-493D-4771-9907-75A43C07B409}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A05D66-493D-4771-9907-75A43C07B409}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

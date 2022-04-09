@@ -33,6 +33,15 @@ namespace Octagon.Models
          }
       }
 
+      public Visibility VisibilityCheckPath
+      {
+         get
+         {
+            return SelectionPass.IsCheckFullPath ? Visibility.Visible : Visibility.Collapsed;
+         }
+      }
+
+
       public TypeSelection TypeSelection
       {
          get { return SelectionPass.TypeSelection; }
@@ -73,6 +82,19 @@ namespace Octagon.Models
             {
                SelectionPass.Occurence = value;
                OnPropertyChanged("Occurence");
+            }
+         }
+      }
+
+      public bool IsCheckFullPath
+      {
+         get { return SelectionPass.IsCheckFullPath; }
+         set
+         {
+            if (SelectionPass.IsCheckFullPath != value)
+            {
+               SelectionPass.IsCheckFullPath = value;
+               OnPropertyChanged("IsCheckFullPath");
             }
          }
       }

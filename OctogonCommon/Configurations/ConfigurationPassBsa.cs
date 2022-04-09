@@ -23,6 +23,7 @@ namespace OctagonCommon.Configurations
 
       public bool IsClean { get; set; }
       public bool IsRepack { get; set; }
+      public bool IsRepackOnlyIfMissingBsa { get; set; }
       public bool IsUnpack { get; set; }
       public bool IsCheckFormatIsGameFormat { get; set; }
 

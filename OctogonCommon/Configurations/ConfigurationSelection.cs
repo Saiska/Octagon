@@ -12,7 +12,7 @@ using OctagonCommon.Statics;
 namespace OctagonCommon.Configurations
 {
    public class ConfigurationSelection
-   {                         
+   {
       public ConfigurationSelection()
       {
          Filters = new List<ConfigurationSelectionPass>();
@@ -23,16 +23,16 @@ namespace OctagonCommon.Configurations
 
       public bool StartFileValidation { get; set; }
 
-      public ConfigurationSelectionPass AddFilter(TypeSelection typeSelection, string pattern, int occurence)
-      {                                                
-         var newElement = new ConfigurationSelectionPass(typeSelection, pattern, occurence);
-         Filters.Add(newElement);        
+      public ConfigurationSelectionPass AddFilter(TypeSelection typeSelection, string pattern, int occurence, bool isCheckFullPath)
+      {
+         var newElement = new ConfigurationSelectionPass(typeSelection, pattern, occurence, isCheckFullPath);
+         Filters.Add(newElement);
          return newElement;
       }
 
       public void RemoveFilter(ConfigurationSelectionPass configurationSelectionPass)
       {
-         Filters.Remove(configurationSelectionPass);     
+         Filters.Remove(configurationSelectionPass);
       }
 
       public void CalculateStartFileValidation()
@@ -41,13 +41,13 @@ namespace OctagonCommon.Configurations
          //StartFileValidation &= Filters.All(e => e.IsStartValidated()); 
       }
 
-      public bool GetValidation(string validate)
+      public bool GetValidation(string name, string fullPath)
       {
          bool fileValidation = StartFileValidation;
          // Assert pattern validation
          foreach (ConfigurationSelectionPass filter in Filters)
          {
-            fileValidation = filter.Validate(fileValidation,validate);    
+            fileValidation = filter.Validate(fileValidation, name, fullPath);
          }
          //
          return fileValidation;
@@ -73,7 +73,7 @@ namespace OctagonCommon.Configurations
             using (StreamReader file = File.OpenText(fileName))
             {
                Filters = Persistence.Serializer.Deserialize(file, typeof(List<ConfigurationSelectionPass>)) as List<ConfigurationSelectionPass>;
-            }                                 
+            }
          }
          catch (Exception e)
          {

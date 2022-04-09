@@ -10,12 +10,14 @@ namespace OctagonCommon.Configurations
 
       public string Pattern { get; set; }
       public int Occurence { get; set; }
+      public bool IsCheckFullPath { get; set; }
 
-      public ConfigurationSelectionPass(TypeSelection typeSelection, string pattern, int occurence)
+      public ConfigurationSelectionPass(TypeSelection typeSelection, string pattern, int occurence, bool isCheckFullPath)
       {
          TypeSelection = typeSelection;
          Pattern = pattern;
          Occurence = occurence;
+         IsCheckFullPath = isCheckFullPath;
       }         
                        
       public bool IsStartValidated()
@@ -28,8 +30,10 @@ namespace OctagonCommon.Configurations
          return TypeSelection == TypeSelection.IncludeOccurenceLess || TypeSelection == TypeSelection.IncludeOccurenceEqualOrMore|| TypeSelection== TypeSelection.ExcludeOccurenceEqualOrMore|| TypeSelection == TypeSelection.ExcludeOccurenceLess;
       }
            
-      public bool Validate(bool state, string validate)
+      public bool Validate(bool state, string name, string fullPath)
       {
+         string validate = IsCheckFullPath ? fullPath : name;
+
          switch (TypeSelection)
          {
             case TypeSelection.IncludeExact:

@@ -131,6 +131,19 @@ namespace Octagon.Models
          }
       }
 
+      public bool IsRepackOnlyIfMissingBsa
+      {
+         get { return PassBsa.IsRepackOnlyIfMissingBsa; }
+         set
+         {
+            if (PassBsa.IsRepackOnlyIfMissingBsa != value)
+            {
+               PassBsa.IsRepackOnlyIfMissingBsa = value;
+               OnPropertyChanged("IsRepackOnlyIfMissingBsa");
+            }
+         }
+      }
+
       public bool IsUnpack
       {
          get { return PassBsa.IsUnpack; }

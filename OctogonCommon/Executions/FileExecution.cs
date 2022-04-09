@@ -270,7 +270,7 @@ namespace OctagonCommon.Executions
 
 
 
-      public void RepackBsa(List<InformationOrder> bsaOrders, string bsarchGameParameter, bool isMultithread, bool verbose)
+      public void RepackBsa(List<InformationOrder> bsaOrders, bool onlyRepackIfNoBsa, string bsarchGameParameter, bool isMultithread, bool verbose)
       {
          //                               
          Progresser.EventStart(ProgressRepacking);
@@ -286,6 +286,11 @@ namespace OctagonCommon.Executions
             // 
             var dirPath = FileUtils.GetBsaTempDirectory(order.FileSource);
             var dir = new DirectoryInfo(dirPath);
+            //
+            if (onlyRepackIfNoBsa && File.Exists(order.FileSource.FullName))
+            {
+               continue;
+            }
             //
             if (dir.Exists)
             {

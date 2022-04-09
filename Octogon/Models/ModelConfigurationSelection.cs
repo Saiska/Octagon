@@ -45,7 +45,7 @@ namespace Octagon.Models
 
       public void AddFilter()
       {
-         var newElement = Selection.AddFilter(TypeSelection.Include, string.Empty, 1);
+         var newElement = Selection.AddFilter(TypeSelection.Include, string.Empty, 1,false);
          Filters.Add(new ModelConfigurationSelectionPass(newElement));
       }
 

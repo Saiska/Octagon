@@ -317,7 +317,7 @@ namespace OctagonCommon.Executions
          //
          foreach (DirectoryInfo directoryInfo in source.GetDirectories())
          {
-            if (!passBsaSelection.GetValidation(directoryInfo.Name))
+            if (!passBsaSelection.GetValidation(directoryInfo.Name, directoryInfo.FullName))
                continue;
             //
             //auto correction when doing bullshit 

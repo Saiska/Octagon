@@ -60,6 +60,7 @@
     <Compile Include="Args\ProgresserArgs.cs" />
     <Compile Include="Statics\ArchiveExtensionList.cs" />
     <Compile Include="Statics\DxgiFormatList.cs" />
+    <Compile Include="Statics\EspExtensionList.cs" />
     <Compile Include="Statics\GameParameterExtensionList.cs" />
     <Compile Include="Statics\TextureExtensionList.cs" />
     <Compile Include="Statics\TypeLog.cs" />

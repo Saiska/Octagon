@@ -201,8 +201,13 @@ namespace OctagonCommon.Executions
          //  
          if (isBsa)
          {
-            if (mainCfg.PassBsa.Enabled && mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(file.FileSource.FullName)))
+            if (mainCfg.PassBsa.Enabled && mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(file.FileSource.FullName), file.FileSource.FullName))
             {
+               if (mainCfg.PassBsa.IsRepack && Directory.Exists(FileUtils.GetBsaTempDirectory(file.FileSource)))
+               {
+                  confirmOrder = true;
+               }
+
                order.IsBsaFormatCompressed = ExternalTools.CallBsarchProperty(file.FileSource.FullName, "*COMPRESSED");
                //             
                if (mainCfg.PassBsa.IsCheckFormatIsGameFormat)
@@ -240,13 +245,13 @@ namespace OctagonCommon.Executions
                confirmOrder |= isBsaMustBeDecompressed;
             }
          }
-         else if (mainCfg.HasTextureOperation() && GetCurrentImageSize(order, mainCfg.IsVerbose))
+         else if (mainCfg.HasTextureOperation(file.FileSource.Name) && GetCurrentImageSize(order, mainCfg.IsVerbose))
          {
             //                 
             foreach (var scalePass in mainCfg.Passes)
             {
                // Stop here if validation failed
-               if (!scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(file.FileSource.FullName)))
+               if (!scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(file.FileSource.FullName), file.FileSource.FullName))
                {
                   continue;
                }
@@ -658,7 +663,7 @@ namespace OctagonCommon.Executions
          List<DirectoryInfo> validatedDirectories = new List<DirectoryInfo>();
          foreach (DirectoryInfo directoryInfo in source.GetDirectories())
          {
-            if (mainCfg.Selection.GetValidation(directoryInfo.Name))
+            if (mainCfg.Selection.GetValidation(directoryInfo.Name, directoryInfo.FullName))
             {
                validatedDirectories.Add(directoryInfo);
             }
@@ -686,7 +691,7 @@ namespace OctagonCommon.Executions
          List<DirectoryInfo> validatedDirectories = new List<DirectoryInfo>();
          foreach (DirectoryInfo directoryInfo in source.GetDirectories())
          {
-            if (mainCfg.Selection.GetValidation(directoryInfo.Name))
+            if (mainCfg.Selection.GetValidation(directoryInfo.Name, directoryInfo.FullName))
             {
                validatedDirectories.Add(directoryInfo);
             }

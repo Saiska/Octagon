@@ -22,10 +22,13 @@
 							<ColumnDefinition Width="5"/>
 							<ColumnDefinition Width="5*"/>
 							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 						<Rectangle Grid.Column="0"  x:Name="trName"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 						<TextBlock  Grid.Column="1"  Margin="5" Text="{Binding Title, Mode=OneWay}" HorizontalAlignment="Stretch"/>
-						<TextBlock  Grid.Column="2"  Margin="5" Visibility="{Binding VisibilityOccurence, Mode=OneWay}"  Text="{Binding Occurence, Mode=OneWay,Converter={StaticResource customIntToStringConverter}}" HorizontalAlignment="Stretch"/>
+						<TextBlock  Grid.Column="2"  Margin="5" Visibility="{Binding VisibilityOccurence, Mode=OneWay}"  Text="{Binding Occurence, Mode=OneWay,Converter={StaticResource customIntToStringConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+						<TextBlock  Grid.Column="3"  Margin="5" Visibility="{Binding VisibilityCheckPath, Mode=OneWay}" Foreground="OrangeRed" Text="(Checking the entire file path)" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
 					</Grid>
 					<DataTemplate.Triggers>
 						<DataTrigger Binding="{Binding FilterType, Mode=OneWay}" Value="0">

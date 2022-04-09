@@ -71,6 +71,11 @@ namespace OctagonCommon.Configurations
       public string PathMergeDirectory { get; set; }
       public string PathMergePriorityFile { get; set; }
 
+      public bool HasTextureOperation(string filename)
+      {
+         return !Search.IsSearchInDepthNotNeeded(filename) && Passes.Any();
+      }
+
       public bool HasTextureOperation()
       {
          return Search.IsSearchEnabled || Passes.Any();

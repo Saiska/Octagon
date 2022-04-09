@@ -51,11 +51,38 @@ namespace OctagonCommon.Executions
       {
          //                        
          var extension = isBsa ? ArchiveExtensionList.List : TextureExtensionList.List;
-         //
+         //               
          //                                                  
          // Get  each file into the new directory.
          foreach (FileInfo fileSource in source.GetFiles())
-         {
+         {                  
+            // Patch for non existing ba2 but existing ba2 unarchived directory
+            if (isBsa && EspExtensionList.List.Any(e => string.Equals(e, fileSource.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            {
+               //var custom = FileUtils.GetBsaTempDirectory(fileSource);   
+               FileInfo possible1 = new FileInfo(Path.Combine(fileSource.DirectoryName, Path.GetFileNameWithoutExtension(fileSource.FullName) + " - textures.ba2"));
+               FileInfo possible2 = new FileInfo(Path.Combine(fileSource.DirectoryName, Path.GetFileNameWithoutExtension(fileSource.FullName) + " - main.ba2"));
+
+               if (!File.Exists(possible1.FullName))
+               {
+                  var custom1 = FileUtils.GetBsaTempDirectory(possible1);
+                  if (Directory.Exists(custom1))
+                  {
+                     result.Add(new InformationFile(possible1, possible1));
+                  }
+               }
+
+               if (!File.Exists(possible2.FullName))
+               {
+                  var custom1 = FileUtils.GetBsaTempDirectory(possible2);
+                  if (Directory.Exists(custom1))
+                  {
+                     result.Add(new InformationFile(possible2, possible2));
+                  }
+               }
+
+
+            }
             //ignore no dds file                                                                               
             if (!extension.Any(e => string.Equals(e, fileSource.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
@@ -68,13 +95,18 @@ namespace OctagonCommon.Executions
             // Stop here if all validation failed
             if (!isBsa)
             {
+               if (mainCfg.Search.IsSearchInDepthNotNeeded(fileSource.Name))
+               {
+                  continue;
+               }
+               //
                bool passValidation = mainCfg.Search.IsSearchEnabled;
                //
                if (!passValidation)
                {
                   foreach (var scalePass in mainCfg.Passes)
                   {
-                     if (scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName)))
+                     if (scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName), fileSource.FullName))
                      {
                         passValidation = true;
                         break;
@@ -87,7 +119,7 @@ namespace OctagonCommon.Executions
             }
             else
             {
-               if (!mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName)))
+               if (!mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName), fileSource.FullName))
                {
                   continue;
                }
@@ -112,7 +144,7 @@ namespace OctagonCommon.Executions
          // Copy each subdirectory using recursion.            
          foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
          {
-            if (firstPass && !mainCfg.Selection.GetValidation(diSourceSubDir.Name))
+            if (firstPass && !mainCfg.Selection.GetValidation(diSourceSubDir.Name, diSourceSubDir.FullName))
                continue;
             //
             GetFileInfos(diSourceSubDir, result, isBsa, eventName, mainCfg, fileCount, false);
@@ -150,8 +182,13 @@ namespace OctagonCommon.Executions
             // Stop here if all validation failed
             if (!isBsa)
             {
-               bool passValidation = mainCfg.Search.IsSearchEnabled;
+               if (mainCfg.Search.IsSearchInDepthNotNeeded(fileSource.Name))
+               {
+                  continue;
+               }
                //
+               bool passValidation = mainCfg.Search.IsSearchEnabled;
+               //    
                if (!passValidation && mainCfg.IsBackupActivated && mainCfg.IsRecopyOriginal)
                {
                   if (fileTarget.Exists && fileTarget.Length != fileSource.Length)
@@ -164,7 +201,7 @@ namespace OctagonCommon.Executions
                {
                   foreach (var scalePass in mainCfg.Passes)
                   {
-                     if (scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName)))
+                     if (scalePass.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName), fileSource.FullName))
                      {
                         passValidation = true;
                         break;
@@ -177,7 +214,7 @@ namespace OctagonCommon.Executions
             }
             else
             {
-               if (!mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName)))
+               if (!mainCfg.PassBsa.Selection.GetValidation(Path.GetFileNameWithoutExtension(fileSource.FullName), fileSource.FullName))
                {
                   continue;
                }
@@ -202,7 +239,7 @@ namespace OctagonCommon.Executions
          // Copy each subdirectory using recursion.            
          foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
          {
-            if (firstPass && !mainCfg.Selection.GetValidation(diSourceSubDir.Name))
+            if (firstPass && !mainCfg.Selection.GetValidation(diSourceSubDir.Name, diSourceSubDir.FullName))
                continue;
             //
             DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);

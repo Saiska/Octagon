@@ -200,7 +200,7 @@
 									<TextBlock Text="Clean empty and deleted mods from the backup directory at the end of the process"
 									           TextWrapping="Wrap" />
 								</CheckBox>
-								
+
 
 							</StackPanel>
 						</StackPanel>
@@ -531,10 +531,20 @@
 								          IsChecked="{Binding Main.ModelPassBsa.IsUnpack, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }">
 									<TextBlock Text="Unpack BSAs files containing DDS textures" TextWrapping="Wrap" />
 								</CheckBox>
-								<CheckBox Margin="5"
-								          IsChecked="{Binding Main.ModelPassBsa.IsRepack, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }">
-									<TextBlock Text="Repack BSAs after processing" TextWrapping="Wrap" />
-								</CheckBox>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<CheckBox Margin="5" Grid.Column="0"
+									          IsChecked="{Binding Main.ModelPassBsa.IsRepack, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }">
+										<TextBlock Text="Repack BSAs after processing" TextWrapping="Wrap" />
+									</CheckBox>
+									<CheckBox Margin="5" Grid.Column="1"
+									          IsChecked="{Binding Main.ModelPassBsa.IsRepackOnlyIfMissingBsa, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }">
+										<TextBlock Text="Check this to only repack if there is not a bsa file already" TextWrapping="Wrap" />
+									</CheckBox>
+								</Grid>
 								<CheckBox Margin="5"
 								          IsChecked="{Binding Main.ModelPassBsa.IsClean, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }">
 									<TextBlock Text="Clean BSAs temporary files after processing" TextWrapping="Wrap" />

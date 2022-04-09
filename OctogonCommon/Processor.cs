@@ -336,7 +336,7 @@ namespace OctagonCommon
             {
                if (mainCfg.PassBsa.MustRepack())
                {
-                  FileExecution.RepackBsa(processorArgs.BsaOrders, mainCfg.PassBsa.GameParameter, mainCfg.IsUseMultithreading, mainCfg.IsVerbose);
+                  FileExecution.RepackBsa(processorArgs.BsaOrders,mainCfg.PassBsa.IsRepackOnlyIfMissingBsa, mainCfg.PassBsa.GameParameter, mainCfg.IsUseMultithreading, mainCfg.IsVerbose);
                }
                if (mainCfg.PassBsa.MustClean())
                {
